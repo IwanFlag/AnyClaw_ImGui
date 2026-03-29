@@ -1,0 +1,35 @@
+// resources.rc — Windows resource file for AnyClaw
+
+#include <windows.h>
+
+1 VERSIONINFO
+FILEVERSION 1,0,0,0
+PRODUCTVERSION 1,0,0,0
+FILEFLAGSMASK 0x3fL
+FILEFLAGS 0x0L
+FILEOS VOS_NT_WINDOWS32
+FILETYPE VFT_APP
+FILESUBTYPE VFT2_UNKNOWN
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904E4"
+        BEGIN
+            VALUE "CompanyName", "AnyClaw Project"
+            VALUE "FileDescription", "AnyClaw - OpenClaw Windows Manager"
+            VALUE "FileVersion", "1.0.0"
+            VALUE "InternalName", "AnyClaw"
+            VALUE "LegalCopyright", "Copyright (C) 2024 AnyClaw Project"
+            VALUE "OriginalFilename", "AnyClaw.exe"
+            VALUE "ProductName", "AnyClaw"
+            VALUE "ProductVersion", "1.0.0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0409, 1252
+    END
+END
+
+// Application icon (uncomment when icon file is ready)
+// IDI_APPICON ICON "res\\anyclaw.ico"

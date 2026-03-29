@@ -1,0 +1,213 @@
+// lang.cpp — Internationalization implementation for AnyClaw
+
+#include "lang.h"
+#include <windows.h>
+
+namespace anyclaw {
+
+// ── Chinese strings ──────────────────────────────────────────────────
+static const char* zh[] = {
+    /* AppTitle */             "AnyClaw 设置",
+    /* TabGeneral */          "常规",
+    /* TabAccount */          "账号",
+    /* TabModels */           "模型",
+    /* TabAbout */            "关于",
+    /* StatusRunning */       "● 运行中",
+    /* StatusDetected */      "● 已检测到",
+    /* StatusError */         "● 异常",
+    /* StatusNotInstalled */  "○ 未安装",
+    /* StatusUnknown */       "○ 未知",
+    /* LabelVersion */        "版本: %s",
+    /* LabelPath */           "路径: %s",
+    /* LabelPort */           "端口: %d",
+    /* LabelRestart */        "重启",
+    /* LabelViewLogs */       "查看日志",
+    /* LabelOpenDir */        "打开目录",
+    /* LabelAutoStart */      "开机自启",
+    /* LabelHealthInterval */ "健康检查间隔 (秒)",
+    /* LabelLanguage */       "显示语言:",
+    /* LabelNotDetected */    "未检测到 OpenClaw",
+    /* LabelInstallOc */      "安装 OpenClaw",
+    /* AccountTitle */        "OpenRouter 账号",
+    /* AccountConnected */    "已连接 OpenRouter",
+    /* AccountApiKey */       "API Key: %s",
+    /* AccountRefreshModels */"刷新模型列表",
+    /* AccountLogout */       "断开连接",
+    /* AccountInputHint */    "请输入 OpenRouter API Key",
+    /* AccountConnect */      "连接",
+    /* AccountNotRegistered */"还没有 OpenRouter 账号?",
+    /* AccountGoRegister */   "去注册",
+    /* ModelNoModels */       "暂无可用模型",
+    /* ModelNeedAccount */    "请先连接 OpenRouter 账号",
+    /* ModelCurrent */        "当前模型: %s",
+    /* ModelSearchHint */     "搜索模型...",
+    /* ModelContext */        "上下文: %s tokens",
+    /* ModelCount */          "共 %d 个模型",
+    /* AboutVersion */        "AnyClaw v1.0.0",
+    /* AboutDescription */    "OpenClaw Windows 桌面管家",
+    /* AboutOcVersion */      "OpenClaw 版本: %s",
+    /* AboutGithub */         "GitHub",
+    /* AboutDocs */           "文档",
+    /* AboutCheckUpdate */    "检查更新",
+    /* WizardTitle */         "首次配置向导",
+    /* WizardLanguageTitle */ "选择显示语言",
+    /* WizardLanguagePrompt */"请选择 AnyClaw 的显示语言:",
+    /* WizardNext */          "下一步",
+    /* WizardPrev */          "上一步",
+    /* WizardStep2 */         "第二步: OpenClaw 状态",
+    /* WizardDetected */      "已检测到 OpenClaw",
+    /* WizardNotDetected */   "未检测到 OpenClaw，选择安装方式:",
+    /* WizardInstallNpm */    "通过 npm 安装",
+    /* WizardInstallExe */    "通过 EXE 安装",
+    /* WizardSkip */          "跳过",
+    /* WizardStep3 */         "第三步: OpenRouter 账号",
+    /* WizardInputApiKey */   "输入 API Key",
+    /* WizardComplete */      "完成",
+    /* WizardNoAccount */     "还没有账号?",
+    /* WizardGoRegister */    "去注册",
+    /* WizardSelectModel */   "选择大模型",
+    /* WizardFinish */        "完成配置",
+    /* NotifySelfCheckRunning */ "正在执行自检...",
+    /* NotifyInstallSuccess */   "安装成功",
+    /* NotifyGatewayRestarting */"正在重启 Gateway...",
+    /* NotifyGatewayRestarted */ "Gateway 已重启",
+    /* NotifySettingsSaved */    "设置已保存",
+    /* ErrOpenClawNotInstalled */"OpenClaw 未安装",
+    /* ErrNodeNotFound */        "未检测到 Node.js",
+    /* ErrSelfHealing */         "正在尝试修复...",
+    /* ErrInstallFailed */       "安装失败",
+    /* ErrNetworkError */        "网络连接失败",
+    /* ErrApiKeyInvalid */       "API Key 无效",
+    /* Save */                   "保存",
+    /* Cancel */                 "取消",
+    /* TrayOpenSettings */       "打开设置 / Settings",
+    /* TrayRestart */            "重启 OpenClaw",
+    /* TrayViewLogs */           "查看日志 / Logs",
+    /* TrayAutoStart */          "开机自启 / Auto Start",
+    /* TrayAbout */              "关于 / About",
+    /* TrayExit */               "退出 / Exit",
+    /* BalloonRecovered */       "OpenClaw 已恢复正常",
+    /* BalloonOffline */         "⚠ OpenClaw 已离线",
+    /* BalloonSettingsSaved */   "设置已保存，正在重启...",
+    /* BalloonInstallSuccess */  "OpenClaw 安装成功",
+    /* BalloonStartFailed */     "OpenClaw 无法启动",
+    /* BalloonApiKeyInvalid */   "API Key 无效",
+    /* BalloonNetworkError */    "网络连接失败",
+};
+
+// ── English strings ──────────────────────────────────────────────────
+static const char* en[] = {
+    /* AppTitle */             "AnyClaw Settings",
+    /* TabGeneral */          "General",
+    /* TabAccount */          "Account",
+    /* TabModels */           "Models",
+    /* TabAbout */            "About",
+    /* StatusRunning */       "● Running",
+    /* StatusDetected */      "● Detected",
+    /* StatusError */         "● Error",
+    /* StatusNotInstalled */  "○ Not Installed",
+    /* StatusUnknown */       "○ Unknown",
+    /* LabelVersion */        "Version: %s",
+    /* LabelPath */           "Path: %s",
+    /* LabelPort */           "Port: %d",
+    /* LabelRestart */        "Restart",
+    /* LabelViewLogs */       "View Logs",
+    /* LabelOpenDir */        "Open Directory",
+    /* LabelAutoStart */      "Auto Start",
+    /* LabelHealthInterval */ "Health Check Interval (sec)",
+    /* LabelLanguage */       "Language:",
+    /* LabelNotDetected */    "OpenClaw not detected",
+    /* LabelInstallOc */      "Install OpenClaw",
+    /* AccountTitle */        "OpenRouter Account",
+    /* AccountConnected */    "Connected to OpenRouter",
+    /* AccountApiKey */       "API Key: %s",
+    /* AccountRefreshModels */"Refresh Models",
+    /* AccountLogout */       "Disconnect",
+    /* AccountInputHint */    "Enter your OpenRouter API Key",
+    /* AccountConnect */      "Connect",
+    /* AccountNotRegistered */"Don't have an OpenRouter account?",
+    /* AccountGoRegister */   "Register",
+    /* ModelNoModels */       "No models available",
+    /* ModelNeedAccount */    "Please connect your OpenRouter account first",
+    /* ModelCurrent */        "Current model: %s",
+    /* ModelSearchHint */     "Search models...",
+    /* ModelContext */        "Context: %s tokens",
+    /* ModelCount */          "%d models total",
+    /* AboutVersion */        "AnyClaw v1.0.0",
+    /* AboutDescription */    "OpenClaw Windows Desktop Manager",
+    /* AboutOcVersion */      "OpenClaw version: %s",
+    /* AboutGithub */         "GitHub",
+    /* AboutDocs */           "Docs",
+    /* AboutCheckUpdate */    "Check for Updates",
+    /* WizardTitle */         "First-time Setup Wizard",
+    /* WizardLanguageTitle */ "Select Display Language",
+    /* WizardLanguagePrompt */"Choose the display language for AnyClaw:",
+    /* WizardNext */          "Next",
+    /* WizardPrev */          "Back",
+    /* WizardStep2 */         "Step 2: OpenClaw Status",
+    /* WizardDetected */      "OpenClaw detected",
+    /* WizardNotDetected */   "OpenClaw not detected. Choose install method:",
+    /* WizardInstallNpm */    "Install via npm",
+    /* WizardInstallExe */    "Install via EXE",
+    /* WizardSkip */          "Skip",
+    /* WizardStep3 */         "Step 3: OpenRouter Account",
+    /* WizardInputApiKey */   "Enter API Key",
+    /* WizardComplete */      "Done",
+    /* WizardNoAccount */     "Don't have an account?",
+    /* WizardGoRegister */    "Register",
+    /* WizardSelectModel */   "Select Model",
+    /* WizardFinish */        "Finish Setup",
+    /* NotifySelfCheckRunning */ "Running self-check...",
+    /* NotifyInstallSuccess */   "Installation successful",
+    /* NotifyGatewayRestarting */"Restarting Gateway...",
+    /* NotifyGatewayRestarted */ "Gateway restarted",
+    /* NotifySettingsSaved */    "Settings saved",
+    /* ErrOpenClawNotInstalled */"OpenClaw not installed",
+    /* ErrNodeNotFound */        "Node.js not found",
+    /* ErrSelfHealing */         "Attempting repair...",
+    /* ErrInstallFailed */       "Installation failed",
+    /* ErrNetworkError */        "Network error",
+    /* ErrApiKeyInvalid */       "Invalid API Key",
+    /* Save */                   "Save",
+    /* Cancel */                 "Cancel",
+    /* TrayOpenSettings */       "Open Settings",
+    /* TrayRestart */            "Restart OpenClaw",
+    /* TrayViewLogs */           "View Logs",
+    /* TrayAutoStart */          "Start with Windows",
+    /* TrayAbout */              "About",
+    /* TrayExit */               "Exit",
+    /* BalloonRecovered */       "OpenClaw recovered",
+    /* BalloonOffline */         "⚠ OpenClaw offline",
+    /* BalloonSettingsSaved */   "Settings saved, restarting...",
+    /* BalloonInstallSuccess */  "OpenClaw installed successfully",
+    /* BalloonStartFailed */     "Failed to start OpenClaw",
+    /* BalloonApiKeyInvalid */   "Invalid API Key",
+    /* BalloonNetworkError */    "Network error",
+};
+
+// ── Lookup ───────────────────────────────────────────────────────────
+
+const char* S(Str key, Lang lang) {
+    int idx = static_cast<int>(key);
+    int count = static_cast<int>(Str::COUNT);
+    if (idx < 0 || idx >= count) return "???";
+    return (lang == Lang::Chinese) ? zh[idx] : en[idx];
+}
+
+const char* lang_name(Lang lang) {
+    switch (lang) {
+        case Lang::Chinese: return "中文";
+        case Lang::English: return "English";
+        default: return "???";
+    }
+}
+
+Lang detect_system_language() {
+    LANGID lid = GetUserDefaultUILanguage();
+    if (PRIMARYLANGID(lid) == LANG_CHINESE) {
+        return Lang::Chinese;
+    }
+    return Lang::English;
+}
+
+} // namespace anyclaw

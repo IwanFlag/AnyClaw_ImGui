@@ -1,0 +1,31 @@
+AnyClaw 用户许可协议
+
+1. AnyClaw 是一个开源的 OpenClaw 管理工具，不隶属于 OpenClaw 官方。
+
+2. 使用 AnyClaw 可能涉及：
+   - 调用 OpenRouter API 产生费用
+   - 修改系统配置（注册表、开机自启等）
+   - 安装和管理第三方软件 (OpenClaw)
+
+3. 用户应自行了解 OpenClaw 和 OpenRouter 的服务条款。
+
+4. AnyClaw 提供两种 OpenClaw 安装方式：
+   - npm 全局安装（通过 npm install -g openclaw）
+   - EXE 安装器安装（通过 OpenClaw 官方安装程序）
+   用户可选择任一方式，也可自行安装后让 AnyClaw 自动检测。
+
+5. AnyClaw 提供两种卸载方式：
+   - 通过 npm 卸载（npm uninstall -g openclaw）
+   - 通过系统卸载程序卸载（控制面板/设置 → 应用）
+   用户可选择仅卸载 AnyClaw 或同时卸载 OpenClaw。
+
+6. 在法律允许的最大范围内，AnyClaw 不对以下情况承担责任：
+   - 因使用本软件导致的任何直接或间接损失
+   - 大模型 API 调用产生的费用
+   - OpenClaw 运行异常导致的服务中断
+   - 用户数据的丢失或泄露
+   - 第三方软件（OpenClaw、Node.js、OpenRouter）的问题
+
+7. 安装和使用 AnyClaw 即表示您已阅读、理解并同意上述条款。
+
+如果您不同意以上条款，请点击"退出"取消安装。

@@ -1,6 +1,7 @@
 // gui.cpp — ImGui settings window (with i18n support)
 
 #include "gui.h"
+#include <GLFW/glfw3.h>
 #include <imgui.h>
 #include <cstring>
 #include <algorithm>
@@ -505,13 +506,17 @@ void SettingsWindow::render_first_run_wizard() {
                 ImGui::TextColored(COLOR_TEXT, T(Str::WizardDetected));
 
                 if (!config_.openclaw_version.empty()) {
-                    ImGui::TextColored(COLOR_TEXT_DIM,
-                        (std::string(T(Str::LabelVersion)) + " %s").c_str(),
+                    ImGui::TextColored(COLOR_TEXT_DIM, "%s: %s",
+                        (lang_ == Lang::Chinese) ? "版本" : "Version",
                         config_.openclaw_version.c_str());
                 }
-                ImGui::TextColored(COLOR_TEXT_DIM,
-                    (std::string(T(Str::LabelPath)) + " %s").c_str(),
-                    config_.openclaw_install_dir.c_str());
+                if (!config_.openclaw_install_dir.empty()) {
+                    std::string dp = config_.openclaw_install_dir;
+                    std::replace(dp.begin(), dp.end(), '\\', '/');
+                    ImGui::TextColored(COLOR_TEXT_DIM, "%s: %s",
+                        (lang_ == Lang::Chinese) ? "路径" : "Path",
+                        dp.c_str());
+                }
 
                 ImGui::Spacing();
                 if (ImGui::Button(T(Str::WizardNext))) {

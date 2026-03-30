@@ -7,6 +7,8 @@
 #include <string>
 #include <functional>
 
+struct GLFWwindow;  // forward declaration
+
 namespace anyclaw {
 
 enum class GuiTab {
@@ -33,6 +35,7 @@ public:
     void set_config(const Config& cfg);
     void set_status(OpenClawStatus status, const std::string& message);
     void set_callbacks(const GuiCallbacks& cb);
+    void set_glfw_window(GLFWwindow* win) { glfw_window_ = win; }
     void show_first_run();
     void render(bool* p_open);
 
@@ -69,6 +72,12 @@ private:
     // Status message (transient)
     char status_buf_[512] = {};
     float status_timer_ = 0.0f;
+
+    // Borderless window drag
+    GLFWwindow* glfw_window_ = nullptr;
+    bool dragging_ = false;
+    double drag_start_x_ = 0, drag_start_y_ = 0;
+    int drag_win_x_ = 0, drag_win_y_ = 0;
 };
 
 } // namespace anyclaw

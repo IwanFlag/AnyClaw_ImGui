@@ -179,14 +179,25 @@ static int app_main(HINSTANCE hInstance, LPSTR lpCmdLine) {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+    // Keep OS decorations — min/max/close buttons from system title bar
 
-    g_window = glfwCreateWindow(800, 520, "AnyClaw", nullptr, nullptr);
+    // Detect primary monitor resolution, use 70% as initial size
+    GLFWmonitor* primary = glfwGetPrimaryMonitor();
+    const GLFWvidmode* mode = glfwGetVideoMode(primary);
+    int init_w = static_cast<int>(mode->width * 0.70f);
+    int init_h = static_cast<int>(mode->height * 0.70f);
+    if (init_w < 800) init_w = 800;
+    if (init_h < 520) init_h = 520;
+
+    g_window = glfwCreateWindow(init_w, init_h, "AnyClaw", nullptr, nullptr);
     if (!g_window) {
         glfwTerminate();
         MessageBoxA(nullptr, "Failed to create GLFW window.", "AnyClaw Error", MB_ICONERROR);
         return 1;
     }
 
+    // Center window on screen
+    glfwSetWindowPos(g_window, (mode->width - init_w) / 2, (mode->height - init_h) / 2);
     glfwSetWindowSizeLimits(g_window, 640, 400, GLFW_DONT_CARE, GLFW_DONT_CARE);
 
     glfwMakeContextCurrent(g_window);
@@ -216,7 +227,7 @@ static int app_main(HINSTANCE hInstance, LPSTR lpCmdLine) {
         bool fontLoaded = false;
         for (const char* fp : fontPaths) {
             if (GetFileAttributesA(fp) != INVALID_FILE_ATTRIBUTES) {
-                io.Fonts->AddFontFromFileTTF(fp, 22.0f, nullptr,
+                io.Fonts->AddFontFromFileTTF(fp, 26.0f, nullptr,
                     io.Fonts->GetGlyphRangesChineseFull());
                 fontLoaded = true;
                 break;
@@ -290,6 +301,7 @@ static int app_main(HINSTANCE hInstance, LPSTR lpCmdLine) {
         glfwSetWindowShouldClose(g_window, GLFW_TRUE);
     };
     settings_window.set_callbacks(gui_cb);
+    settings_window.set_glfw_window(g_window);
 
     // ── First-run / startup behavior ─────────────────────────────────
     bool start_minimized = (strstr(lpCmdLine, "--minimized") != nullptr);
@@ -317,12 +329,12 @@ static int app_main(HINSTANCE hInstance, LPSTR lpCmdLine) {
             {
                 int win_w, win_h;
                 glfwGetWindowSize(g_window, &win_w, &win_h);
-                // Scale relative to 800x520 baseline, clamped to 1.0–1.8
-                float scale_x = win_w / 800.0f;
-                float scale_y = win_h / 520.0f;
+                // Scale relative to 960x600 baseline, clamped
+                float scale_x = win_w / 960.0f;
+                float scale_y = win_h / 600.0f;
                 float scale = (scale_x < scale_y) ? scale_x : scale_y;
-                if (scale < 1.0f) scale = 1.0f;
-                if (scale > 2.2f) scale = 2.2f;
+                if (scale < 0.85f) scale = 0.85f;
+                if (scale > 2.0f) scale = 2.0f;
                 ImGui::GetIO().FontGlobalScale = scale;
             }
 

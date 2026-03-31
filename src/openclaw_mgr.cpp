@@ -468,19 +468,17 @@ bool OpenClawManager::install(const std::string& method, const std::string& path
         std::vector<char> buf(cmd.begin(), cmd.end());
         buf.push_back('\0');
 
+        // Spawn npm install in a new console window (non-blocking)
+        // This allows the GUI to remain responsive during installation
         if (!CreateProcessA(nullptr, buf.data(), nullptr, nullptr, FALSE,
                             CREATE_NEW_CONSOLE, nullptr, nullptr, &si, &pi)) {
             return false;
         }
-
-        WaitForSingleObject(pi.hProcess, INFINITE);
-        DWORD exitCode = 1;
-        GetExitCodeProcess(pi.hProcess, &exitCode);
         CloseHandle(pi.hProcess);
         CloseHandle(pi.hThread);
-        return exitCode == 0;
+        return true;  // Async — installation runs in separate console window
 #else
-        return std::system("npm install -g openclaw") == 0;
+        return std::system("npm install -g openclaw &") == 0;
 #endif
     }
 
@@ -488,7 +486,7 @@ bool OpenClawManager::install(const std::string& method, const std::string& path
 #ifdef _WIN32
         // Open browser to GitHub releases
         ShellExecuteA(nullptr, "open",
-            "https://github.com/aetheros/openclaw/releases/latest",
+            "https://github.com/IwanFlag/AnyClaw_ImGui/releases/latest",
             nullptr, nullptr, SW_SHOWNORMAL);
         return true;
 #else

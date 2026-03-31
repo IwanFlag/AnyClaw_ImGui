@@ -465,6 +465,7 @@
 | BUG-003 | 托盘右键菜单硬编码英文，未使用本地化字符串 | 中 | 已修复 ✅ |
 | BUG-004 | 账号 Tab 连接时 API Key 无输入验证（空Key可保存） | 低 | 已修复 ✅ |
 | BUG-005 | 模型列表刷新时无 Loading 状态（同步HTTP阻塞UI） | 低 | 已知限，待异步改造 |
+| BUG-006 | 退出安装向导会删除用户的 config.json | 高 | 已修复 ✅ |
 
 ---
 
@@ -476,6 +477,7 @@
 | `9894913` | feat: add model pricing display and enhanced About tab |
 | `adcf7bd` | feat: localize tray context menu + add test plan |
 | `3b3af53` | fix: validate API key non-empty before saving |
+| `fef53da` | fix: remove DeleteFile call in Exit Wizard (BUG-006) |
 
 ---
 

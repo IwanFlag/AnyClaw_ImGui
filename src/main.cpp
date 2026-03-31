@@ -256,6 +256,7 @@ static int app_main(HINSTANCE hInstance, LPSTR lpCmdLine) {
 
     tray.set_callbacks(tray_cb);
     tray.set_autostart_enabled(g_config.auto_start);
+    tray.set_language(g_config.display_language);
     tray.create();
 
     // ── Health monitor ───────────────────────────────────────────────

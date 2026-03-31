@@ -237,19 +237,19 @@ void SystemTray::show_context_menu() {
     HMENU hMenu = CreatePopupMenu();
     if (!hMenu) return;
 
-    AppendMenuA(hMenu, MF_STRING, ID_TRAY_OPEN_SETTINGS, "&Open Settings");
+    AppendMenuA(hMenu, MF_STRING, ID_TRAY_OPEN_SETTINGS, S(Str::TrayOpenSettings, m_lang));
     AppendMenuA(hMenu, MF_SEPARATOR, 0, nullptr);
-    AppendMenuA(hMenu, MF_STRING, ID_TRAY_RESTART, "&Restart Gateway");
-    AppendMenuA(hMenu, MF_STRING, ID_TRAY_VIEW_LOGS, "View &Logs");
+    AppendMenuA(hMenu, MF_STRING, ID_TRAY_RESTART, S(Str::TrayRestart, m_lang));
+    AppendMenuA(hMenu, MF_STRING, ID_TRAY_VIEW_LOGS, S(Str::TrayViewLogs, m_lang));
     AppendMenuA(hMenu, MF_SEPARATOR, 0, nullptr);
 
     // Autostart checkbox
     UINT autostart_flags = MF_STRING | (m_autostart_enabled ? MF_CHECKED : MF_UNCHECKED);
-    AppendMenuA(hMenu, autostart_flags, ID_TRAY_AUTOSTART, "Start with Windows");
+    AppendMenuA(hMenu, autostart_flags, ID_TRAY_AUTOSTART, S(Str::TrayAutoStart, m_lang));
 
     AppendMenuA(hMenu, MF_SEPARATOR, 0, nullptr);
-    AppendMenuA(hMenu, MF_STRING, ID_TRAY_ABOUT, "&About");
-    AppendMenuA(hMenu, MF_STRING, ID_TRAY_EXIT, "E&xit");
+    AppendMenuA(hMenu, MF_STRING, ID_TRAY_ABOUT, S(Str::TrayAbout, m_lang));
+    AppendMenuA(hMenu, MF_STRING, ID_TRAY_EXIT, S(Str::TrayExit, m_lang));
 
     // Required for TrackPopupMenu to work correctly
     SetForegroundWindow(m_hwnd);
@@ -337,6 +337,10 @@ void SystemTray::set_autostart_enabled(bool enabled) {
 
 bool SystemTray::is_autostart_enabled() const {
     return m_autostart_enabled;
+}
+
+void SystemTray::set_language(Lang lang) {
+    m_lang = lang;
 }
 
 } // namespace anyclaw

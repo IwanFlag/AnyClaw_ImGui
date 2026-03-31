@@ -8,6 +8,7 @@
 #include <shellapi.h>
 #include <string>
 #include <functional>
+#include "lang.h"
 
 namespace anyclaw {
 
@@ -43,6 +44,7 @@ public:
 
     void set_autostart_enabled(bool enabled);
     bool is_autostart_enabled() const;
+    void set_language(Lang lang);
 
 private:
     HINSTANCE          m_hInstance = nullptr;
@@ -52,6 +54,7 @@ private:
     IconColor          m_current_color = IconColor::Gray;
     bool               m_autostart_enabled = false;
     TrayCallbacks      m_callbacks;
+    Lang               m_lang = Lang::Chinese;
 
     HICON create_colored_icon(IconColor color);
     void show_context_menu();

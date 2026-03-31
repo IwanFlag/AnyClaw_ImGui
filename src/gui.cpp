@@ -292,10 +292,19 @@ void SettingsWindow::render_account_tab() {
 
         ImGui::Spacing();
         if (ImGui::Button(T(Str::AccountConnect))) {
-            edited_.api_key = api_key_input_;
-            config_ = edited_;
-            config_.save();
-            if (callbacks_.on_save) callbacks_.on_save(config_);
+            // Trim whitespace from API key
+            std::string key_input(api_key_input_);
+            key_input.erase(0, key_input.find_first_not_of(" \t\r\n"));
+            key_input.erase(key_input.find_last_not_of(" \t\r\n") + 1);
+            if (key_input.empty()) {
+                status_message_ = S(Str::ErrApiKeyInvalid, lang_);
+                status_ = OpenClawStatus::Error;
+            } else {
+                edited_.api_key = key_input;
+                config_ = edited_;
+                config_.save();
+                if (callbacks_.on_save) callbacks_.on_save(config_);
+            }
         }
 
         ImGui::Spacing();

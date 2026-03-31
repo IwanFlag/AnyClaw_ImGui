@@ -460,12 +460,26 @@
 
 | Bug ID | 描述 | 严重程度 | 状态 |
 |--------|------|---------|------|
-| BUG-001 | tray.cpp 缺 `<cstdint>` 头文件，导致 MinGW 编译失败 | 高 | 已修复 |
-| BUG-002 | libgcc_s_seh-1.dll 运行时缺失（MinGW 发布版本问题） | 中 | 待解决 |
+| BUG-001 | tray.cpp 缺 `<cstdint>` 头文件，导致 MinGW 编译失败 | 高 | 已修复 ✅ |
+| BUG-002 | libgcc_s_seh-1.dll 运行时缺失（MinGW 发布版本问题） | 中 | 待解决（MSVC编译无此问题）|
+| BUG-003 | 托盘右键菜单硬编码英文，未使用本地化字符串 | 中 | 已修复 ✅ |
+| BUG-004 | 账号 Tab 连接时 API Key 无输入验证（空Key可保存） | 低 | 已修复 ✅ |
+| BUG-005 | 模型列表刷新时无 Loading 状态（同步HTTP阻塞UI） | 低 | 已知限，待异步改造 |
 
 ---
 
-## 六、验收标准
+## 六、已修复 Commit
+
+| Commit | 描述 |
+|--------|------|
+| `df9da74` | fix: add missing `<cstdint>` include for uint32_t in tray.cpp |
+| `9894913` | feat: add model pricing display and enhanced About tab |
+| `adcf7bd` | feat: localize tray context menu + add test plan |
+| `3b3af53` | fix: validate API key non-empty before saving |
+
+---
+
+## 七、验收标准
 
 所有 **P0** 级用例必须通过才能发布；**P1** 级用例允许遗留但需记录；**P2** 级用例鼓励完成。
 

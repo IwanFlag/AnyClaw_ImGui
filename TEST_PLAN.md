@@ -466,6 +466,8 @@
 | BUG-004 | 账号 Tab 连接时 API Key 无输入验证（空Key可保存） | 低 | 已修复 ✅ |
 | BUG-005 | 模型列表刷新时无 Loading 状态（同步HTTP阻塞UI） | 低 | 已知限，待异步改造 |
 | BUG-006 | 退出安装向导会删除用户的 config.json | 高 | 已修复 ✅ |
+| BUG-007 | 安装向导的"EXE安装"按钮打开错误的 GitHub 链接 | 低 | 已修复 ✅ |
+| BUG-008 | npm 安装时 GUI 冻结（`install()` 内部无限等待） | 高 | 已修复 ✅ |
 
 ---
 
@@ -478,6 +480,8 @@
 | `adcf7bd` | feat: localize tray context menu + add test plan |
 | `3b3af53` | fix: validate API key non-empty before saving |
 | `fef53da` | fix: remove DeleteFile call in Exit Wizard (BUG-006) |
+| `1b88e1e` | fix: version bump to v1.0.1, fix GitHub URLs, restart gateway on config save |
+| `e71a7e1` | fix: non-blocking npm install + fix wrong GitHub URL (BUG-007/008) |
 
 ---
 

@@ -6,6 +6,7 @@
 #include <shellapi.h>
 #include <commctrl.h>
 
+#include <cstdint>
 #include <cstring>
 #include <string>
 #include <functional>

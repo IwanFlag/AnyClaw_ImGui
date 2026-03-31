@@ -399,6 +399,19 @@ void SettingsWindow::render_models_tab() {
                 char ctx_label[128];
                 snprintf(ctx_label, sizeof(ctx_label), T(Str::ModelContext), ctx);
                 ImGui::TextColored(COLOR_TEXT_DIM, "%s", ctx_label);
+
+                // Show pricing if available (price per 1M tokens)
+                if (model.pricing_prompt > 0.0 || model.pricing_completion > 0.0) {
+                    ImGui::SameLine();
+                    char price_buf[64];
+                    if (model.pricing_prompt > 0.0 && model.pricing_completion > 0.0) {
+                        snprintf(price_buf, sizeof(price_buf), " $%.2f/$%.2f /1M",
+                            model.pricing_prompt, model.pricing_completion);
+                    } else if (model.pricing_prompt > 0.0) {
+                        snprintf(price_buf, sizeof(price_buf), " $%.2f /1M", model.pricing_prompt);
+                    }
+                    ImGui::TextColored(COLOR_TEXT_DIM, "%s", price_buf);
+                }
                 ImGui::Unindent(24);
             }
 
@@ -424,14 +437,40 @@ void SettingsWindow::render_about_tab() {
     ImGui::Separator();
     ImGui::Spacing();
 
-    if (!config_.openclaw_version.empty()) {
-        char buf[256];
-        snprintf(buf, sizeof(buf), T(Str::AboutOcVersion), config_.openclaw_version.c_str());
-        ImGui::TextColored(COLOR_TEXT_DIM, "%s", buf);
+    // OpenClaw detection status card
+    ImGui::PushStyleColor(ImGuiCol_ChildBg, COLOR_BG_CARD);
+    if (ImGui::BeginChild("##about_status", ImVec2(0, 90), ImGuiChildFlags_Borders)) {
         ImGui::Spacing();
-        ImGui::Separator();
-        ImGui::Spacing();
+        ImGui::Indent(8);
+
+        ImGui::TextColored(status_color(status_), "%s", status_icon(status_));
+        ImGui::SameLine();
+        ImGui::TextColored(COLOR_TEXT, "%s", status_str(status_, lang_));
+
+        if (!config_.openclaw_version.empty()) {
+            char buf[256];
+            snprintf(buf, sizeof(buf), T(Str::AboutOcVersion), config_.openclaw_version.c_str());
+            ImGui::TextColored(COLOR_TEXT_DIM, "%s", buf);
+        }
+        if (!config_.openclaw_install_dir.empty()) {
+            std::string dp = config_.openclaw_install_dir;
+            std::replace(dp.begin(), dp.end(), '\\', '/');
+            char buf2[512];
+            snprintf(buf2, sizeof(buf2), T(Str::LabelPath), dp.c_str());
+            ImGui::TextColored(COLOR_TEXT_DIM, "%s", buf2);
+        }
+        if (config_.openclaw_detected) {
+            char port_buf[64];
+            snprintf(port_buf, sizeof(port_buf), T(Str::LabelPort), config_.openclaw_gateway_port);
+            ImGui::TextColored(COLOR_TEXT_DIM, "%s", port_buf);
+        }
+
+        ImGui::Unindent(8);
     }
+    ImGui::EndChild();
+    ImGui::PopStyleColor();
+
+    ImGui::Spacing();
 
     if (ImGui::Button(T(Str::AboutGithub))) {
         if (callbacks_.on_open_browser)
@@ -446,6 +485,17 @@ void SettingsWindow::render_about_tab() {
     if (ImGui::Button(T(Str::AboutCheckUpdate))) {
         if (callbacks_.on_open_browser)
             callbacks_.on_open_browser("https://github.com/openclaw/anyclaw/releases/latest");
+    }
+
+    ImGui::Spacing();
+    ImGui::Separator();
+    ImGui::Spacing();
+
+    // Config directory
+    {
+        std::string dir = config_.config_dir();
+        std::replace(dir.begin(), dir.end(), '\\', '/');
+        ImGui::TextColored(COLOR_TEXT_DIM, "Config: %s", dir.c_str());
     }
 }
 

@@ -77,6 +77,13 @@ int extract_int(const std::string& line) {
     try { return std::stoi(val); } catch (...) { return 0; }
 }
 
+double extract_double(const std::string& line) {
+    size_t colon = line.find(':');
+    if (colon == std::string::npos) return 0.0;
+    std::string val = trim(line.substr(colon + 1));
+    try { return std::stod(val); } catch (...) { return 0.0; }
+}
+
 bool extract_bool(const std::string& line) {
     size_t colon = line.find(':');
     if (colon == std::string::npos) return false;
@@ -128,6 +135,29 @@ std::vector<OpenRouterModel> extract_models(const std::string& all_content) {
                 m.name = extract_string(line);
             else if (line.find("\"context_length\"") != std::string::npos)
                 m.context_length = extract_int(line);
+            // Handle nested pricing: "pricing": {"prompt": "0.001", "completion": "0.002"}
+            else if (line.find("\"pricing\"") != std::string::npos) {
+                // Find the pricing object {...}
+                size_t p_start = line.find('{');
+                size_t p_end = line.find('}');
+                if (p_start != std::string::npos && p_end != std::string::npos && p_end > p_start) {
+                    std::string pricing_obj = line.substr(p_start, p_end - p_start + 1);
+                    size_t p_colon = pricing_obj.find(':');
+                    if (p_colon != std::string::npos) {
+                        std::string inner = pricing_obj.substr(p_colon + 1);
+                        // Extract prompt
+                        size_t prompt_pos = inner.find("\"prompt\"");
+                        if (prompt_pos != std::string::npos) {
+                            m.pricing_prompt = extract_double(inner.substr(prompt_pos));
+                        }
+                        // Extract completion
+                        size_t comp_pos = inner.find("\"completion\"");
+                        if (comp_pos != std::string::npos) {
+                            m.pricing_completion = extract_double(inner.substr(comp_pos));
+                        }
+                    }
+                }
+            }
         }
         if (!m.id.empty()) models.push_back(m);
         pos = obj_end + 1;
@@ -157,6 +187,8 @@ std::string serialize_models(const std::vector<OpenRouterModel>& models) {
         result += "      { \"id\": \"" + json_escape(m.id) + "\"";
         if (!m.name.empty()) result += ", \"name\": \"" + json_escape(m.name) + "\"";
         if (m.context_length > 0) result += ", \"context_length\": " + std::to_string(m.context_length);
+        if (m.pricing_prompt > 0.0) result += ", \"pricing_prompt\": " + std::to_string(m.pricing_prompt);
+        if (m.pricing_completion > 0.0) result += ", \"pricing_completion\": " + std::to_string(m.pricing_completion);
         result += " }";
         if (i + 1 < models.size()) result += ",";
         result += "\n";

@@ -295,9 +295,7 @@ static int app_main(HINSTANCE hInstance, LPSTR lpCmdLine) {
         }
     };
     gui_cb.on_exit_and_cleanup = []() {
-        // Delete config file and exit
-        std::string path = g_config.config_path();
-        DeleteFileA(path.c_str());
+        // Just close the window — do NOT delete config
         g_show_window = false;
         glfwSetWindowShouldClose(g_window, GLFW_TRUE);
     };

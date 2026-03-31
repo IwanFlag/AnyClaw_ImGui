@@ -483,7 +483,7 @@ void SettingsWindow::render_about_tab() {
 
     if (ImGui::Button(T(Str::AboutGithub))) {
         if (callbacks_.on_open_browser)
-            callbacks_.on_open_browser("https://github.com/openclaw/anyclaw");
+            callbacks_.on_open_browser("https://github.com/IwanFlag/AnyClaw_ImGui");
     }
     ImGui::SameLine();
     if (ImGui::Button(T(Str::AboutDocs))) {
@@ -493,7 +493,7 @@ void SettingsWindow::render_about_tab() {
     ImGui::SameLine();
     if (ImGui::Button(T(Str::AboutCheckUpdate))) {
         if (callbacks_.on_open_browser)
-            callbacks_.on_open_browser("https://github.com/openclaw/anyclaw/releases/latest");
+            callbacks_.on_open_browser("https://github.com/IwanFlag/AnyClaw_ImGui/releases/latest");
     }
 
     ImGui::Spacing();

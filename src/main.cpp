@@ -87,9 +87,9 @@ static void on_tray_toggle_autostart(bool enabled) {
 
 static void on_tray_about() {
     MessageBoxA(nullptr,
-        "AnyClaw v1.0.0\n"
+        "AnyClaw v1.0.1\n"
         "OpenClaw Windows Desktop Manager\n\n"
-        "https://github.com/aetheros/anyclaw",
+        "https://github.com/IwanFlag/AnyClaw_ImGui",
         "About AnyClaw",
         MB_ICONINFORMATION | MB_OK);
 }
@@ -276,6 +276,13 @@ static int app_main(HINSTANCE hInstance, LPSTR lpCmdLine) {
         g_config.save();
         if (g_health_monitor) {
             g_health_monitor->set_interval(g_config.health_interval_sec);
+        }
+        // Restart gateway to apply new API key or model
+        if (cfg.openclaw_detected) {
+            OpenClawManager::stop_gateway(g_openclaw_info);
+            Sleep(500);
+            OpenClawManager::start_gateway(g_openclaw_info);
+            if (g_tray) g_tray->show_balloon("AnyClaw", "Settings saved, Gateway restarted.");
         }
     };
     gui_cb.on_restart_gateway = on_tray_restart_gateway;
